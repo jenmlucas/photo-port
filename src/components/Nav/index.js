@@ -1,6 +1,9 @@
 import React from 'react';
 
 function Nav() {
+    function categorySelected(name) {
+        console.log(`${name} clicked`)
+    }
     const categories = [
         {
           name: "commercial",
@@ -16,7 +19,7 @@ function Nav() {
       ];
 
     return (
-        <header>
+        <header className="flex-row px-1">
             <h2>
                 <a href="/">
                     <span role="img" aria-label="camera"> 📸</span> Oh Snap!
@@ -24,7 +27,7 @@ function Nav() {
             </h2>
             <nav>
                 <ul className="flex-row">
-                    <li className='mx-2'>
+                    <li className="mx-2">
                         <a href="#about">
                             About Me
                         </a>
@@ -37,7 +40,7 @@ function Nav() {
                         className="mx-1"
                         key={category.name}
                         >
-                            <span>
+                            <span onClick={() => categorySelected(category.name)}>
                                 {category.name}
                             </span>
                         </li>
