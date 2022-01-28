@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { validateEmail } from "../../utils/helpers";
 
 function ContactForm() {
   // JSX
@@ -8,15 +9,30 @@ function ContactForm() {
     message: "",
   });
   const { name, email, message } = formState;
-  
-   function handleSubmit(e) {
-          e.preventDefault();
-          console.log(formState)
-        }
+
+  const [errorMessage, setErrorMessage] = useState("");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log(formState);
+  }
 
   function handleChange(e) {
-      setFormState({ ...formState, [e.target.name]: e.target.value });
+    if (e.target.name === "email") {
+      const isValid = validateEmail(e.target.value);
+      if (!isValid) {
+        setErrorMessage("Your email is invalid.");
+      } else {
+        setErrorMessage("");
+      }
+    } else {
+      if (!e.target.value.length) {
+        setErrorMessage(`${e.target.name} is required.`);
+      } else {
+        setErrorMessage("");
+      }
     }
+  }
 
   return (
     <section>
@@ -28,7 +44,7 @@ function ContactForm() {
           <input
             type="text"
             defaultValue={name}
-            onChange={handleChange}
+            onBlur={handleChange}
             name="name"
           />
         </div>
@@ -39,7 +55,7 @@ function ContactForm() {
             type="email"
             defaultValue={email}
             name="email"
-            onChange={handleChange}
+            onBlur={handleChange}
           />
         </div>
         // message text area
@@ -48,11 +64,18 @@ function ContactForm() {
           <textarea
             name="message"
             defaultValue={message}
-            onChange={handleChange}
+            onBlur={handleChange}
             rows="5"
           />
         </div>
-        <button data-testid="button" type="submit">Submit</button>
+        {errorMessage && (
+          <div>
+            <p className="error-text">{errorMessage}</p>
+          </div>
+        )}
+        <button data-testid="button" type="submit">
+          Submit
+        </button>
       </form>
     </section>
   );
